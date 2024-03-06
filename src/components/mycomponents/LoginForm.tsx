@@ -2,9 +2,9 @@ import ButtonSubmit from '@/components/mycomponents/ButtonSubmit'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-interface Props {}
 
-const LoginForm = (props: Props): JSX.Element => {
+
+const LoginForm = (): JSX.Element => {
   return (
     <form action=''>
       <Label>
