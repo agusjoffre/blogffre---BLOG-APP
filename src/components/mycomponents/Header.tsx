@@ -1,3 +1,4 @@
+'use server'
 import Link from 'next/link'
 import { auth, UserButton, currentUser } from '@clerk/nextjs'
 import ModeToggle from './ToggleTheme'
@@ -24,9 +25,9 @@ const Header = async (): Promise<JSX.Element> => {
         ) : (
           <Link href='/create'>
             <Button
-                size={'sm'}
-                disabled
-                variant={'outline'}
+              size={'sm'}
+              disabled
+              variant={'outline'}
               className='rounded-2xl px-8 py-2 font-medium'
             >
               Crear post
