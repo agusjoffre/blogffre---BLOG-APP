@@ -9,11 +9,9 @@ import {
   ref,
   uploadBytes
 } from 'firebase/storage'
-import { currentUser, auth } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs'
 import { type Post } from './types'
 import { revalidatePath } from 'next/cache'
-
-const { userId } = auth()
 
 export async function createPost(
   tags: string[],
@@ -21,6 +19,7 @@ export async function createPost(
   contentValue: string,
   formData: FormData
 ): Promise<void> {
+  const user = await currentUser()
   const image = formData.get('image') as File
 
   // CHECK SI LA IMAGEN ES VALIDA
@@ -38,9 +37,10 @@ export async function createPost(
   }
 
   // SUBE IMAGEN A FIREBASE
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const imageRef = ref(
     storage,
-    `images/${image.name}{${crypto.randomUUID()}}${userId}`
+    `images/${image.name}{${crypto.randomUUID()}}${user?.id}`
   ) // agregar USERID
   await uploadBytes(imageRef, image)
   // TOMA URL DE LA IMAGEN DESDE FIREBASE
@@ -50,7 +50,6 @@ export async function createPost(
   tags.shift()
   sources.shift()
 
-  const user = await currentUser()
   // creacion del post object
   const post: Post = {
     title: formData.get('title') as string,
@@ -60,7 +59,7 @@ export async function createPost(
     tags,
     sources,
     createdAt: new Date(),
-    userId,
+    userId: user?.id,
     author:
       user?.username != null
         ? user.username
@@ -106,8 +105,8 @@ export const getAllPosts = async (): Promise<Post[]> => {
 export const getPostsOfUser = async (): Promise<Post[]> => {
   try {
     await connection()
-    const posts = await PostSchema.find({ userId })
-    console.log(posts)
+    const user = await currentUser()
+    const posts = await PostSchema.find({ userId: user?.id })
     return posts
   } catch (err) {
     const error = err as Error
@@ -116,4 +115,10 @@ export const getPostsOfUser = async (): Promise<Post[]> => {
       cause: error.message
     })
   }
+}
+
+export const getOnePost = async (id: string | string[]): Promise<Post> => {
+  await connection()
+  const post = await PostSchema.findById(id)
+  return post
 }

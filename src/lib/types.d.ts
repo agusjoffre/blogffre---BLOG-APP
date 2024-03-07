@@ -6,7 +6,7 @@ export interface Post {
     tags: string[]
     sources: string[]
     imageURL: string
-    userId: string | null
+    userId: string | null | undefined
     author: string | null | undefined
     createdAt: Date
 }

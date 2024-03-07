@@ -3,7 +3,7 @@ import { authMiddleware } from '@clerk/nextjs'
 
 export default authMiddleware({
   // Routes that can be accessed while signed out
-  publicRoutes: ['/', '/posts/:path*', '/about']
+  publicRoutes: ['/', '/posts/:path*', '/about', '/auth/login', '/auth/register'],
 })
 
 export const config = {
