@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useFormStatus } from 'react-dom'
 
-const LoginForm = (): JSX.Element => {
+const RegisterForm = (): JSX.Element => {
   const { pending } = useFormStatus()
   return (
     <form
@@ -34,11 +34,25 @@ const LoginForm = (): JSX.Element => {
           maxLength={20}
         />
       </Label>
+      <Label>
+        <span className='text-lg font-semibold text-foreground'>
+          Confirm Password
+        </span>
+        <Input
+          className='w-full text-xl font-normal'
+          name='confirmPassword'
+          type='password'
+          required
+          placeholder='8 characters minimum'
+          minLength={8}
+          maxLength={20}
+        />
+      </Label>
       <div className='flex justify-center gap-4'>
-        <ButtonSubmit size='sm' text='Login' variant='default' />
+        <ButtonSubmit size='sm' text='Register' variant='default' />
       </div>
     </form>
   )
 }
 
-export default LoginForm
+export default RegisterForm
